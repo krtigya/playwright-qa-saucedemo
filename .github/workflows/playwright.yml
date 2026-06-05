@@ -27,19 +27,20 @@ jobs:
         run: npm ci
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - name: Create .env file
-        run: |
-          cat > .env << EOF
-          BASE_URL=https://www.saucedemo.com
-          API_BASE_URL=https://reqres.in/api
-          STANDARD_USER=standard_user
-          LOCKED_USER=locked_out_user
-          PROBLEM_USER=problem_user
-          PERF_USER=performance_glitch_user
-          PASSWORD=secret_sauce
-          INVALID_USER=invalid_user
-          INVALID_PASSWORD=wrong_password
-          EOF
+     - name: Create .env file
+  run: |
+    cat > .env << EOF
+    BASE_URL=https://www.saucedemo.com
+    API_BASE_URL=https://reqres.in/api
+    REQRES_API_KEY=${{ secrets.REQRES_API_KEY }}
+    STANDARD_USER=standard_user
+    LOCKED_USER=locked_out_user
+    PROBLEM_USER=problem_user
+    PERF_USER=performance_glitch_user
+    PASSWORD=secret_sauce
+    INVALID_USER=invalid_user
+    INVALID_PASSWORD=wrong_password
+    EOF
       - name: Run Playwright tests (shard ${{ matrix.shard }}/2)
         run: npx playwright test --shard=${{ matrix.shard }}/2 --reporter=blob
         env:
