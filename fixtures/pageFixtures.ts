@@ -6,7 +6,7 @@ import { CheckoutPage } from '../pages/CheckoutPage';
 import { ProductDetailPage } from '../pages/ProductDetailPage';
 import { TestUsers } from '../utils/testData';
 
-// Define fixture types
+
 type PageFixtures = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
@@ -37,7 +37,7 @@ export const test = base.extend<PageFixtures>({
     await use(new ProductDetailPage(page));
   },
 
-  // Pre-authenticated page fixture — logs in before the test
+  
   authenticatedPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();

@@ -5,7 +5,7 @@ dotenv.config();
 const BASE_URL = process.env.API_BASE_URL ?? 'https://reqres.in/api';
 const API_KEY = process.env.REQRES_API_KEY ?? '';
 
-// Shared headers for every request
+
 const headers = {
   'Content-Type': 'application/json',
   'x-api-key': API_KEY,
@@ -13,7 +13,6 @@ const headers = {
 
 test.describe('API Tests — User Management (reqres.in)', () => {
 
-  // ── GET Tests ────────────────────────────────────────────────────────────────
 
   test('API-001: GET /users returns paginated user list', async ({ request }) => {
     const response = await request.get(`${BASE_URL}/users?page=1`, { headers });
@@ -26,7 +25,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(Array.isArray(body.data)).toBe(true);
     expect(body.data.length).toBeGreaterThan(0);
 
-    // Validate user object shape
+  
     const user = body.data[0];
     expect(user).toHaveProperty('id');
     expect(user).toHaveProperty('email');
@@ -51,7 +50,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(response.status()).toBe(404);
   });
 
-  // ── POST Tests ───────────────────────────────────────────────────────────────
+  
 
   test('API-004: POST /users creates a new user', async ({ request }) => {
     const newUser = { name: 'Jane QA', job: 'Automation Engineer' };
@@ -105,7 +104,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(body).toHaveProperty('token');
   });
 
-  // ── PUT / PATCH Tests ────────────────────────────────────────────────────────
+  
 
   test('API-007: PUT /users/:id updates user completely', async ({ request }) => {
     const updatedUser = { name: 'Updated Name', job: 'Senior QA' };
@@ -141,7 +140,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(response.status()).toBe(204);
   });
 
-  // ── Negative API Tests ───────────────────────────────────────────────────────
+  
 
   test('API-NEG-001: POST /register without password returns 400', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/register`, {
@@ -175,7 +174,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(body.data.length).toBe(0);
   });
 
-  // ── Response Header Tests ────────────────────────────────────────────────────
+  
 
   test('API-010: Response has correct Content-Type header', async ({ request }) => {
     const response = await request.get(`${BASE_URL}/users`, { headers });
@@ -183,7 +182,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(contentType).toContain('application/json');
   });
 
-  // ── Pagination Test ──────────────────────────────────────────────────────────
+  
 
   test('API-011: GET /users page 2 returns different data than page 1', async ({ request }) => {
     const res1 = await request.get(`${BASE_URL}/users?page=1`, { headers });
@@ -198,7 +197,7 @@ test.describe('API Tests — User Management (reqres.in)', () => {
     expect(page1.page).toBe(1);
     expect(page2.page).toBe(2);
 
-    // Ensure different users on each page
+    
     const page1Ids = page1.data.map((u: { id: number }) => u.id);
     const page2Ids = page2.data.map((u: { id: number }) => u.id);
     const overlap = page1Ids.filter((id: number) => page2Ids.includes(id));
