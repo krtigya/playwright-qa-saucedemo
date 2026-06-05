@@ -1,0 +1,21 @@
+{
+  "name": "playwright-qa-saucedemo",
+  "version": "1.0.0",
+  "description": "QA Automation test suite for saucedemo.com using Playwright + TypeScript",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test tests/ui",
+    "test:api": "npx playwright test tests/api",
+    "test:negative": "npx playwright test tests/negative",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "report": "npx playwright show-report",
+    "codegen": "npx playwright codegen https://www.saucedemo.com"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.0.0",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.4.5"
+  }
+}

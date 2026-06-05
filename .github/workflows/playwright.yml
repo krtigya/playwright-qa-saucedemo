@@ -1,0 +1,107 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  test:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          BASE_URL=https://www.saucedemo.com
+          API_BASE_URL=https://reqres.in/api
+          STANDARD_USER=standard_user
+          LOCKED_USER=locked_out_user
+          PROBLEM_USER=problem_user
+          PERF_USER=performance_glitch_user
+          PASSWORD=secret_sauce
+          INVALID_USER=invalid_user
+          INVALID_PASSWORD=wrong_password
+          EOF
+
+      - name: Run Playwright tests (shard ${{ matrix.shard }}/2)
+        run: npx playwright test --shard=${{ matrix.shard }}/2
+        env:
+          CI: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-shard-${{ matrix.shard }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  merge-reports:
+    name: Merge Reports
+    if: always()
+    needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download shard 1 report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-shard-1
+          path: playwright-report-shard-1
+
+      - name: Download shard 2 report
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-shard-2
+          path: playwright-report-shard-2
+
+      - name: Merge reports
+        run: npx playwright merge-reports --reporter html ./playwright-report-shard-*
+
+      - name: Upload merged report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-merged
+          path: playwright-report/
+          retention-days: 30
