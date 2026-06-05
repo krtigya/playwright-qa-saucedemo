@@ -1,5 +1,5 @@
 # playwright-qa-saucedemo
-# 🎭 Playwright QA Automation Suite — SauceDemo
+# Playwright QA Automation Suite — SauceDemo
 
 A production-ready end-to-end test automation framework built as part of a 
 QA Automation Engineer interview task. The suite targets **saucedemo.com** 
