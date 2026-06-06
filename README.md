@@ -1,17 +1,30 @@
-<<<<<<< HEAD
 # Playwright QA Automation Suite — SauceDemo
 
-A production-ready QA automation framework built with **Playwright + TypeScript** targeting [saucedemo.com](https://www.saucedemo.com), with API tests against [reqres.in](https://reqres.in).
+A production-ready end-to-end test automation framework built as part of a QA Automation Engineer interview task. The suite targets **saucedemo.com** for UI testing and **reqres.in** for REST API testing, implementing industry best practices including Page Object Model, custom fixtures, environment configuration, and CI/CD integration.
+
+> ✅ **57 / 57 tests passing** in ~34s
+
+---
+
+## What This Project Covers
+
+- **UI Automation** — Login, inventory browsing, product sorting, shopping cart management, and complete end-to-end checkout flow
+- **API Testing** — Full CRUD operations, authentication, pagination, and error handling against a live REST API
+- **Negative Testing** — Invalid credentials, empty form submissions, locked accounts, and unauthorized direct URL access
+- **Page Object Model** — Clean separation between test logic and UI selectors across 6 page classes
+- **CI/CD Pipeline** — GitHub Actions with parallel sharding, automatic retries, and merged HTML reports
+
+---
 
 ## Tech Stack
 
 | Tool | Purpose |
-|---|---|
-| [Playwright](https://playwright.dev) | Test runner + browser automation + API testing |
+|------|---------|
+| [Playwright](https://playwright.dev) | Test runner, browser automation, API testing |
 | TypeScript | Type-safe test authoring |
-| Page Object Model | Maintainable UI abstraction layer |
+| Page Object Model | Maintainable UI abstraction |
 | dotenv | Environment configuration |
-| GitHub Actions | CI/CD with parallel sharding |
+| GitHub Actions | CI/CD with parallel test sharding |
 
 ---
 
@@ -32,7 +45,7 @@ playwright-qa/
 ├── pages/
 │   ├── BasePage.ts              # Abstract base with shared helpers
 │   ├── LoginPage.ts
-│   ├── InventoryPage.ts
+│   ├── InventoryPage.
 │   ├── CartPage.ts
 │   ├── CheckoutPage.ts
 │   └── ProductDetailPage.ts
@@ -44,7 +57,6 @@ playwright-qa/
 ├── .github/
 │   └── workflows/
 │       └── playwright.yml       # CI/CD pipeline
-├── .env                         # Local environment variables (git-ignored)
 ├── .env.example                 # Template for environment setup
 ├── playwright.config.ts
 ├── tsconfig.json
@@ -64,7 +76,7 @@ playwright-qa/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/playwright-qa-saucedemo.git
+git clone https://github.com/krtigya/playwright-qa-saucedemo.git
 cd playwright-qa-saucedemo
 ```
 
@@ -84,7 +96,7 @@ npx playwright install --with-deps chromium
 
 ```bash
 cp .env.example .env
-# .env is pre-filled with saucedemo defaults — no changes needed
+# .env is pre-filled with saucedemo defaults — no changes needed for local runs
 ```
 
 ---
@@ -116,6 +128,20 @@ npm run report
 
 ---
 
+## Test Coverage Summary
+
+| Category | Tests | Type |
+|---|---|---|
+| Authentication | 4 | UI - Positive |
+| Inventory & Sorting | 6 | UI - Positive |
+| Shopping Cart | 6 | UI - Positive |
+| Checkout Flow | 3 | UI - Positive |
+| Negative Cases | 10 | UI - Negative |
+| API Tests | 14 | API (reqres.in) |
+| **Total** | **57** | **All passing** |
+
+---
+
 ## Reports
 
 After a test run, Playwright generates:
@@ -134,98 +160,15 @@ Tests run automatically on GitHub Actions:
 - On every pull request targeting `main`
 - Nightly at 2 AM UTC
 
-The pipeline uses **2 parallel shards** to speed up execution and merges reports into a single artifact.
-
----
-
-## Test Coverage Summary
-
-| Category | Test Count |
-|---|---|
-| Authentication | 9 |
-| Inventory & Sorting | 6 |
-| Shopping Cart | 6 |
-| Checkout | 6 |
-| Unauthorized Access | 2 |
-| API Tests | 14 |
-| **Total** | **43** |
+The pipeline uses **2 parallel shards** to speed up execution and merges results into a single HTML report artifact.
 
 ---
 
 ## Design Decisions
 
-- **No hard waits** — All waits use `waitFor`, `expect(...).toBeVisible()`, or `waitForURL`
+- **No hard waits** — All synchronization via Playwright's `waitFor` and `expect` assertions
 - **Fixture-based auth** — `authenticatedPage` fixture handles login once per test, avoiding repetition
 - **POM encapsulation** — Selectors live only in page objects; tests never touch raw locators
 - **`data-test` attributes** — All selectors use stable `data-test` attributes where available
-- **Environment variables** — All credentials/URLs in `.env`; never hardcoded in test files
-=======
-# playwright-qa-saucedemo
-# Playwright QA Automation Suite — SauceDemo
-
-A production-ready end-to-end test automation framework built as part of a 
-QA Automation Engineer interview task. The suite targets **saucedemo.com** 
-for UI testing and **reqres.in** for REST API testing, implementing industry 
-best practices including Page Object Model, custom fixtures, environment 
-configuration, and CI/CD integration.
-
-## Test Results
-> **57 / 57 tests passing** in 34.3s
-
-## What This Project Covers
-
-This project demonstrates real-world QA automation skills across:
-
-- **UI Automation** — Login, inventory browsing, product sorting, 
-  shopping cart management, and complete end-to-end checkout flow
-- **API Testing** — Full CRUD operations, authentication, pagination, 
-  and error handling against a live REST API
-- **Negative Testing** — Invalid credentials, empty form submissions, 
-  locked accounts, and unauthorized direct URL access
-- **Page Object Model** — Clean separation between test logic and 
-  UI selectors across 6 page classes
-- **CI/CD Pipeline** — GitHub Actions with parallel sharding, 
-  automatic retries, and merged HTML reports
-
-## Architecture Highlights
-
-- **Zero hard waits** — all synchronization via Playwright's built-in 
-  `waitFor` and `expect` assertions
-- **Stable selectors** — uses `data-test` attributes throughout, 
-  resistant to CSS/layout changes
-- **Custom fixtures** — `authenticatedPage` fixture handles login 
-  setup automatically for tests that don't test auth itself
-- **Environment-driven** — all credentials and URLs live in `.env`, 
-  never hardcoded in test files
-- **Fail-safe reporting** — screenshots, video, and trace files 
-  auto-captured on every failure
-
-##  Test Coverage Summary
-
-| Category            | Tests | Type              |
-|---------------------|-------|-------------------|
-| Authentication      | 4     | UI - Positive     |
-| Inventory & Sorting | 6     | UI - Positive     |
-| Shopping Cart       | 6     | UI - Positive     |
-| Checkout Flow       | 3     | UI - Positive     |
-| Negative Cases      | 10    | UI - Negative     |
-| API Tests           | 14    | API (reqres.in)   |
-| **Total**           | **57**| **All passing** |
-
-##  Tech Stack
-
-| Tool | Purpose |
-|------|---------|
-| [Playwright](https://playwright.dev) | Test runner, browser automation, API testing |
-| TypeScript | Type-safe test authoring |
-| Page Object Model | Maintainable UI abstraction |
-| dotenv | Environment configuration |
-| GitHub Actions | CI/CD with parallel test sharding |
-
-##  Target Applications
-
-| App | URL | Purpose |
-|-----|-----|---------|
-| SauceDemo | https://www.saucedemo.com | UI test target |
-| ReqRes | https://reqres.in | REST API test target |
->>>>>>> 2f757149082bde84428e1c902ccbcb56bbfdc5f3
+- **Environment variables** — All credentials and URLs in `.env`; never hardcoded in test files
+- **Fail-safe reporting** — Screenshots, video, and trace files auto-captured on every failure
