@@ -45,7 +45,7 @@ playwright-qa/
 ├── pages/
 │   ├── BasePage.ts              # Abstract base with shared helpers
 │   ├── LoginPage.ts
-│   ├── InventoryPage.
+│   ├── InventoryPage.ts
 │   ├── CartPage.ts
 │   ├── CheckoutPage.ts
 │   └── ProductDetailPage.ts
